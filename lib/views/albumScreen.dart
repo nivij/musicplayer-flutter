@@ -25,7 +25,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   Future<void> loadAlbums() async {
     final spotify = SpotifyApi(SpotifyApiCredentials(CustomStrings.clientId, CustomStrings.clientSecret));
 
-    final albumId = '4yP0hdKOZPNshxUOjY0cZj';
+    final albumId = '18NOKLkZETa4sWwLMIm0UZ';
     final spotifyAlbum = await spotify.albums.get(albumId);
     print('\nAlbum Tracks:');
     var tracksResponse = await spotify.albums.getTracks(albumId).all();
@@ -72,6 +72,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
           Container(
             padding: EdgeInsets.all(16.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Album Cover
@@ -90,7 +91,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                 ),
                 SizedBox(height: 8.0),
 
-                // Album Name
+
                 Column(
 
                   children: [
