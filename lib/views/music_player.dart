@@ -1,6 +1,7 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:mobile_music_player_lyrics/constants/colors.dart';
 import 'package:mobile_music_player_lyrics/constants/strings.dart';
 import 'package:mobile_music_player_lyrics/models/music.dart';
@@ -121,9 +122,14 @@ class _MusicPlayerState extends State<MusicPlayer> {
                       )
                     ],
                   ),
-                  const Icon(
-                    Icons.close,
-                    color: Colors.white,
+                  Bounceable(
+                     onTap: () {
+                       Navigator.pop(context);
+                     },
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),

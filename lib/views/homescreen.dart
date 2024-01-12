@@ -29,7 +29,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
     final spotifyAlbum = await spotify.albums.get(albumId);
     print('\nAlbum Tracks:');
     var tracksResponse = await spotify.albums.getTracks(albumId).all();
-    List<String?> trackIds = tracksResponse.map((track) => track.id).toList();
+    // List<String?> trackIds = tracksResponse.map((track) => track.id).toList();
     tracks = tracksResponse
         .map(
           (track) => Track(
@@ -48,8 +48,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
       image: spotifyAlbum.images?.isNotEmpty == true ? spotifyAlbum.images!.first.url : null,
     );
 
-print('trackid');
-print(trackIds);
+// print('trackid');
+// print(trackIds);
     setState(() {
       albums = [album];
     });
@@ -57,8 +57,12 @@ print(trackIds);
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Albums'),
       ),
       body: Column(
@@ -67,13 +71,13 @@ print(trackIds);
           // Album Details
           Container(
             padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Album Cover
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: 180,
+                  height: 180,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                     image: albums.isNotEmpty && albums.first.image != null
@@ -85,10 +89,20 @@ print(trackIds);
                   ),
                 ),
                 SizedBox(height: 8.0),
+
                 // Album Name
-                Text(albums.isNotEmpty ? albums.first.name ?? '' : ''),
+                Column(
+
+                  children: [
+                    Text(albums.isNotEmpty ? albums.first.name ?? '' : '',   style: textTheme.titleMedium
+                        ?.copyWith(color: Colors.white,fontSize: 28,fontWeight: FontWeight.bold,)),
+                    SizedBox(height: 20,),
+                    Text(albums.isNotEmpty ? albums.first.artist ?? '' : '',   style: textTheme.titleMedium
+                        ?.copyWith(color: Colors.white60)),
+                  ],
+                ),
                 // Artist Name
-                Text(albums.isNotEmpty ? albums.first.artist ?? '' : ''),
+
               ],
             ),
           ),
@@ -108,19 +122,15 @@ print(trackIds);
                     );
                   },
                   child: ListTile(
-                    title: Text(track.songName ?? ''),
-                    subtitle: Text(track.artistName ?? ''),
-                    leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        image: track.songImage != null
-                            ? DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(track.songImage!),
-                        )
-                            : null,
+                    title: Text(track.songName ?? ''  , style: textTheme.titleMedium
+                        ?.copyWith(color: Colors.white)),
+                    subtitle: Text(track.artistName ?? '',   style: textTheme.titleMedium
+                        ?.copyWith(color: Colors.white60)),
+                    leading: Text(
+                      '${index+1}',
+                      style: TextStyle(
+                        color: Colors.white,fontSize: 15,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
