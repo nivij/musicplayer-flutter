@@ -18,3 +18,19 @@ class Music {
       this.artistImage,
       this.songColor});
 }
+class Track {
+  Duration? duration;
+  String trackId;
+  String? artistName;
+  String? songName;
+  String? songImage;
+
+  Track(
+      {this.duration,
+      required this.trackId,
+      this.artistName,
+      this.songName,
+      this.songImage,
+      });
+}
+

@@ -12,7 +12,9 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'widgets/art_work_image.dart';
 
 class MusicPlayer extends StatefulWidget {
-  const MusicPlayer({super.key});
+  final String trackId;
+
+  const MusicPlayer({Key? key, required this.trackId}) : super(key: key);
 
   @override
   State<MusicPlayer> createState() => _MusicPlayerState();
@@ -20,7 +22,7 @@ class MusicPlayer extends StatefulWidget {
 
 class _MusicPlayerState extends State<MusicPlayer> {
   final player = AudioPlayer();
-  Music music = Music(trackId: '2p8IUWQDrpjuFltbdgLOag');
+  late Music music;
 
   @override
   void dispose() {
@@ -30,12 +32,19 @@ class _MusicPlayerState extends State<MusicPlayer> {
 
   @override
   void initState() {
+    super.initState();
+    music = Music(trackId: widget.trackId);
+
     final credentials = SpotifyApiCredentials(
-        CustomStrings.clientId, CustomStrings.clientSecret);
+      CustomStrings.clientId,
+      CustomStrings.clientSecret,
+    );
+
     final spotify = SpotifyApi(credentials);
     spotify.tracks.get(music.trackId).then((track) async {
       String? tempSongName = track.name;
       if (tempSongName != null) {
+        // Rest of your initialization logic
         music.songName = tempSongName;
         music.artistName = track.artists?.first.name ?? "";
         String? image = track.album?.images?.first.url;
@@ -48,7 +57,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
         }
         music.artistImage = track.artists?.first.images?.first.url;
         final yt = YoutubeExplode();
-        final video = (await yt.search.search("$tempSongName ${music.artistName??""}")).first;
+        final video =
+            (await yt.search.search("$tempSongName ${music.artistName ?? ""}"))
+                .first;
         final videoId = video.id.value;
         music.duration = video.duration;
         setState(() {});
@@ -57,12 +68,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
         player.play(UrlSource(audioUrl.toString()));
       }
     });
-    super.initState();
   }
 
   Future<Color?> getImagePalette(ImageProvider imageProvider) async {
     final PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(imageProvider);
+    await PaletteGenerator.fromImageProvider(imageProvider);
     return paletteGenerator.dominantColor?.color;
   }
 
@@ -118,39 +128,40 @@ class _MusicPlayerState extends State<MusicPlayer> {
                 ],
               ),
               Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: ArtWorkImage(image: music.songImage),
-                  )),
+                flex: 2,
+                child: Center(
+                  child: ArtWorkImage(image: music.songImage),
+                ),
+              ),
               Expanded(
-                  child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            music.songName ?? '',
-                            style: textTheme.titleLarge
-                                ?.copyWith(color: Colors.white),
-                          ),
-                          Text(
-                            music.artistName ?? '-',
-                            style: textTheme.titleMedium
-                                ?.copyWith(color: Colors.white60),
-                          ),
-                        ],
-                      ),
-                      const Icon(
-                        Icons.favorite,
-                        color: CustomColors.primaryColor,
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  StreamBuilder(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              music.songName ?? '',
+                              style: textTheme.titleLarge
+                                  ?.copyWith(color: Colors.white),
+                            ),
+                            Text(
+                              music.artistName ?? '-',
+                              style: textTheme.titleMedium
+                                  ?.copyWith(color: Colors.white60),
+                            ),
+                          ],
+                        ),
+                        const Icon(
+                          Icons.favorite,
+                          color: CustomColors.primaryColor,
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    StreamBuilder(
                       stream: player.onPositionChanged,
                       builder: (context, data) {
                         return ProgressBar(
@@ -160,32 +171,44 @@ class _MusicPlayerState extends State<MusicPlayer> {
                           baseBarColor: Colors.white10,
                           thumbColor: Colors.white,
                           timeLabelTextStyle:
-                              const TextStyle(color: Colors.white),
+                          const TextStyle(color: Colors.white),
                           progressBarColor: Colors.white,
                           onSeek: (duration) {
                             player.seek(duration);
                           },
                         );
-                      }),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LyricsPage(music: music, player: player,)));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LyricsPage(
+                                  music: music,
+                                  player: player,
+                                ),
+                              ),
+                            );
                           },
-                          icon: const Icon(Icons.lyrics_outlined,
-                              color: Colors.white)),
-                      IconButton(
+                          icon: const Icon(
+                            Icons.lyrics_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.skip_previous,
-                              color: Colors.white, size: 36)),
-                      IconButton(
+                          icon: const Icon(
+                            Icons.skip_previous,
+                            color: Colors.white,
+                            size: 36,
+                          ),
+                        ),
+                        IconButton(
                           onPressed: () async {
                             if (player.state == PlayerState.playing) {
                               await player.pause();
@@ -200,19 +223,28 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                 : Icons.play_circle,
                             color: Colors.white,
                             size: 60,
-                          )),
-                      IconButton(
+                          ),
+                        ),
+                        IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.skip_next,
-                              color: Colors.white, size: 36)),
-                      IconButton(
+                          icon: const Icon(
+                            Icons.skip_next,
+                            color: Colors.white,
+                            size: 36,
+                          ),
+                        ),
+                        IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.loop,
-                              color: CustomColors.primaryColor)),
-                    ],
-                  )
-                ],
-              ))
+                          icon: const Icon(
+                            Icons.loop,
+                            color: CustomColors.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
