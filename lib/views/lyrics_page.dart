@@ -67,7 +67,8 @@ class _LyricsPageState extends State<LyricsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.music.songColor,
+      backgroundColor: Colors.black,
+      // widget.music.songColor,
       body: lyrics != null
           ? SafeArea(
         bottom: false,
