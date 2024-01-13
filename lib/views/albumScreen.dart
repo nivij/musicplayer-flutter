@@ -68,7 +68,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final audioPlayer = AudioPlayerSingleton().audioPlayer;
+    final audioPlayerManager = Provider.of<AudioPlayerManager>(context, listen: false);
+    final player = audioPlayerManager.audioPlayer;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(

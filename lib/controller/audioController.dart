@@ -1,15 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class AudioPlayerSingleton {
-  static final AudioPlayerSingleton _singleton = AudioPlayerSingleton._internal();
+class AudioPlayerManager extends ChangeNotifier {
+  late AudioPlayer _audioPlayer;
 
-  factory AudioPlayerSingleton() {
-    return _singleton;
+  AudioPlayerManager() {
+    _audioPlayer = AudioPlayer();
   }
-
-  final AudioPlayer _audioPlayer;
-
-  AudioPlayerSingleton._internal() : _audioPlayer = AudioPlayer();
 
   AudioPlayer get audioPlayer => _audioPlayer;
 }

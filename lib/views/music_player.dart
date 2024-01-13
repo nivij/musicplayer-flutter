@@ -10,7 +10,6 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:spotify/spotify.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-import '../controller/audioController.dart';
 import 'widgets/art_work_image.dart';
 
 class MusicPlayer extends StatefulWidget {
@@ -24,7 +23,7 @@ class MusicPlayer extends StatefulWidget {
 
 class _MusicPlayerState extends State<MusicPlayer> {
 
-  final player =  AudioPlayerSingleton().audioPlayer;
+  final player = AudioPlayer();
   late Music music;
 
   @override
