@@ -1,10 +1,14 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:mobile_music_player_lyrics/constants/strings.dart';
 import 'package:mobile_music_player_lyrics/models/album.dart';
 import 'package:mobile_music_player_lyrics/views/music_player.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:spotify/spotify.dart'; // Import Spotify package
+import 'package:provider/provider.dart';
+import 'package:spotify/spotify.dart';
+
+import '../controller/audioController.dart'; // Import Spotify package
 
 class AlbumsScreen extends StatefulWidget {
   @override
@@ -12,14 +16,16 @@ class AlbumsScreen extends StatefulWidget {
 }
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
-  late  List<AlbumPlay> albums;
-  late  List<TrackPlay> tracks;
+  late List<AlbumPlay> albums;
+  late List<TrackPlay> tracks;
+  late AudioPlayer _audioPlayer;
 
   @override
   void initState() {
     super.initState();
     albums = [];
     tracks = [];
+    _audioPlayer = AudioPlayer();
     loadAlbums();
   }
 
@@ -62,7 +68,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
+    final audioPlayer = AudioPlayerSingleton().audioPlayer;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -151,7 +157,46 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               },
             ),
           ),
-
+          Container(
+            padding: EdgeInsets.all(16.0),
+            color: Colors.black,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    // Previous button logic
+                  },
+                  icon: Icon(
+                    Icons.skip_previous,
+                    color: Colors.white,
+                    size: 36,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    // Play/Pause button logic
+                    // Use _audioPlayer to control playback
+                  },
+                  icon: Icon(
+                    Icons.play_circle,
+                    color: Colors.white,
+                    size: 60,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    // Next button logic
+                  },
+                  icon: Icon(
+                    Icons.skip_next,
+                    color: Colors.white,
+                    size: 36,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
