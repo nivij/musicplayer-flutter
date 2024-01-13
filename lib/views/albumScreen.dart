@@ -26,7 +26,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   Future<void> loadAlbums() async {
     final spotify = SpotifyApi(SpotifyApiCredentials(CustomStrings.clientId, CustomStrings.clientSecret));
 
-    final albumId = '18NOKLkZETa4sWwLMIm0UZ';
+    final albumId = '6tkjU4Umpo79wwkgPMV3nZ';
     final spotifyAlbum = await spotify.albums.get(albumId);
     print('\nAlbum Tracks:');
     var tracksResponse = await spotify.albums.getTracks(albumId).all();
@@ -70,14 +70,12 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
           // Album Details
           Container(
-            padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+
+            child: Column(
               children: [
                 // Album Cover
                 Container(
@@ -99,11 +97,21 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                 Column(
 
                   children: [
-                    Text(albums.isNotEmpty ? albums.first.name ?? '' : '',   style: textTheme.titleMedium
-                        ?.copyWith(color: Colors.white,fontSize: 28,fontWeight: FontWeight.bold,)),
-                    SizedBox(height: 20,),
-                    Text(albums.isNotEmpty ? albums.first.artist ?? '' : '',   style: textTheme.titleMedium
-                        ?.copyWith(color: Colors.white60)),
+                    Text(
+                      albums.isNotEmpty ? albums.first.name ?? '' : '',
+                      style: textTheme.titleMedium
+                          ?.copyWith(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis, // Specify the overflow behavior
+
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      albums.isNotEmpty ? albums.first.artist ?? '' : '',
+                      style: textTheme.titleMedium?.copyWith(color: Colors.white60),
+                      maxLines: 1, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis, // Specify the overflow behavior
+                    ),
                   ],
                 ),
                 // Artist Name
