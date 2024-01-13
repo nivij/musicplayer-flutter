@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:mobile_music_player_lyrics/constants/strings.dart';
+import 'package:mobile_music_player_lyrics/models/album.dart';
 import 'package:mobile_music_player_lyrics/views/music_player.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:spotify/spotify.dart'; // Import Spotify package
@@ -11,8 +12,8 @@ class AlbumsScreen extends StatefulWidget {
 }
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
-  late  List<Album> albums;
-  late  List<Track> tracks;
+  late  List<AlbumPlay> albums;
+  late  List<TrackPlay> tracks;
 
   @override
   void initState() {
@@ -30,9 +31,12 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
     print('\nAlbum Tracks:');
     var tracksResponse = await spotify.albums.getTracks(albumId).all();
     // List<String?> trackIds = tracksResponse.map((track) => track.id).toList();
+
+
+
     tracks = tracksResponse
         .map(
-          (track) => Track(
+          (track) => TrackPlay(
         trackId: track.id ?? "",
         artistName: track.artists?.isNotEmpty == true ? track.artists!.first.name : null,
         songName: track.name,
@@ -41,7 +45,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
     )
         .toList();
 
-    Album album = Album(
+    AlbumPlay album = AlbumPlay(
       albumId: albumId,
       name: spotifyAlbum.name,
       artist: spotifyAlbum.artists?.isNotEmpty == true ? spotifyAlbum.artists!.first.name : null,
@@ -63,7 +67,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Albums'),
+
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,30 +150,3 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   }
 }
 
-class Album {
-  String? name;
-  String? artist;
-  String? image;
-  String albumId;
-
-  Album({
-    required this.albumId,
-    this.name,
-    this.artist,
-    this.image,
-  });
-}
-
-class Track {
-  String trackId;
-  String? artistName;
-  String? songName;
-  String? songImage;
-
-  Track({
-    required this.trackId,
-    this.artistName,
-    this.songName,
-    this.songImage,
-  });
-}
